@@ -15,7 +15,7 @@ all: docker-build
 docker-build:
 	docker build -f Dockerfile \
 	 -t $(IMAGE_NAME):$(IMAGE_VERSION) .
-	docker tag $(IMAGE_NAME):$(IMAGE_VERSION) $(IMAGE_NAME):latest
+	docker tag $(IMAGE_NAME):$(IMAGE_VERSION) $(IMAGE_NAME):21.9
 
 .PHONY: clean
 clean:
@@ -59,7 +59,7 @@ test-clean:
 
 # push with multi-arch builds
 .PHONY: push-latest push-versioned
-PLATFORMS ?= linux/amd64,linux/arm64,linux/arm/v7
+PLATFORMS ?= linux/amd64,linux/arm64,linux/arm/v8
 
 push-latest:
 	docker buildx build -f Dockerfile --push \

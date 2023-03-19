@@ -20,7 +20,7 @@ RUN go mod vendor
 RUN cp -r vendor/* ${GOPATH}/src/
 
 # Build protoc tools
-RUN go install google.golang.org/protobuf/cmd/protoc-gen-go
+RUN go install github.com/golang/protobuf/protoc-gen-go
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 RUN go install github.com/chrusty/protoc-gen-jsonschema/cmd/protoc-gen-jsonschema
 RUN go install github.com/envoyproxy/protoc-gen-validate
@@ -29,7 +29,20 @@ RUN go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
 RUN go install github.com/infobloxopen/protoc-gen-preprocess
 RUN cd ${GOPATH}/src/github.com/infobloxopen/protoc-gen-atlas-query-validate && dep ensure && GO111MODULE=off go install .
 RUN go install github.com/infobloxopen/protoc-gen-atlas-validate
-RUN go install github.com/infobloxopen/protoc-gen-gorm
+RUN go install github.com/infobloxopen/protoc-gen-gorm@v0.21.0
+
+# build protoc-gen-swagger separately with atlas_patch
+RUN go get github.com/go-openapi/spec && \
+	rm -rf ${GOPATH}/src/github.com/grpc-ecosystem/ \
+	&& mkdir -p ${GOPATH}/src/github.com/grpc-ecosystem/ && \
+	cd ${GOPATH}/src/github.com/grpc-ecosystem && \
+	git clone --single-branch -b atlas-patch https://github.com/infobloxopen/grpc-gateway.git && \
+	cd grpc-gateway/protoc-gen-swagger && go build -o /out/usr/bin/protoc-gen-swagger main.go
+
+# Download any projects that have proto-only packages, since go mod ignores those
+RUN cd ${GOPATH}/src/github.com && mkdir -p googleapis/googleapis && cd googleapis/googleapis && \
+    git init && git remote add origin https://github.com/googleapis/googleapis && git fetch && \
+    git checkout origin/master -- *.proto
 
 RUN mkdir -p /out/usr/bin
 
@@ -52,7 +65,10 @@ RUN cd ${GOPATH}/src/github.com/infobloxopen && git clone --single-branch --bran
 COPY third_party/ /out/protos/go/src
 RUN find ${GOPATH}/src -name "*.proto" -exec cp --parents {} /out/protos \;
 
-FROM alpine:3.15
+RUN mkdir -p /out/protos && \
+    find ${GOPATH}/src -name "*.proto" -exec cp --parents {} /out/protos \;
+
+FROM alpine:3.14.2
 RUN apk add --no-cache libstdc++ protobuf-dev
 COPY --from=builder /out/usr /usr
 COPY --from=builder /out/protos /
@@ -68,6 +84,8 @@ ENTRYPOINT ["protoc", "-I.", \
     "-Igithub.com/envoyproxy/protoc-gen-validate/validate", \
     # required import paths for go-proto-validators plugin
     "-Igithub.com/mwitkow/go-proto-validators", \
+    # googleapis proto files
+    "-Igithub.com/googleapis/googleapis", \
     # required import paths for protoc-gen-gorm plugin, Should add /proto path once updated
     "-Igithub.com/infobloxopen/protoc-gen-gorm", \
     # required import paths for protoc-gen-atlas-query-validate plugin
