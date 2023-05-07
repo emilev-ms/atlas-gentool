@@ -251,6 +251,8 @@ github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:
 github.com/imdario/mergo v0.3.4 h1:mKkfHkZWD8dC7WxKx3N9WCF0Y+dLau45704YQmY6H94=
 github.com/imdario/mergo v0.3.4/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
+github.com/infobloxopen/atlas-app-toolkit v0.24.0 h1:rijBHWmD9QGdBcDD46VzBRJ/IMJ/ZV7VaBEWhm/LBRs=
+github.com/infobloxopen/atlas-app-toolkit v0.24.0/go.mod h1:uhhFMYWbwqXR+s+uOHiFaz23iX0P1kBfs+L1TIVmN+k=
 github.com/infobloxopen/atlas-app-toolkit v0.24.1-0.20210416193901-4c7518b07e08/go.mod h1:9BTHnpff654rY1J8KxSUOLJ+ZUDn2Vi3mmk26gQDo1M=
 github.com/infobloxopen/atlas-app-toolkit v1.2.1 h1:vTW9bjP8CRC+FWzucJWQQWFDKR5ynQPdh+ihAEwqtSI=
 github.com/infobloxopen/atlas-app-toolkit v1.2.1/go.mod h1:CzJ6ssNawJ9D/IPgEyEsErksyNOh9zx8Tjq7tJq3pYQ=

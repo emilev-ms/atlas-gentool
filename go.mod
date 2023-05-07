@@ -8,7 +8,7 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-openapi/spec v0.20.7
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.2
-	github.com/infobloxopen/atlas-app-toolkit v1.2.1
+	github.com/infobloxopen/atlas-app-toolkit v0.24.0
 	github.com/infobloxopen/protoc-gen-atlas-query-validate v0.5.2
 	github.com/infobloxopen/protoc-gen-atlas-validate v1.0.1
 	github.com/infobloxopen/protoc-gen-gorm v1.1.2
