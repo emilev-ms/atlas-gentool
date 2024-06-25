@@ -1,5 +1,5 @@
 # The docker image to generate Golang code from Protol Buffer.
-FROM golang:1.17.0-alpine3.14 as builder
+FROM golang:1.19-alpine as builder
 LABEL intermediate=true
 MAINTAINER DL NGP-App-Infra-API <ngp-app-infra-api@infoblox.com>
 
@@ -7,7 +7,7 @@ MAINTAINER DL NGP-App-Infra-API <ngp-app-infra-api@infoblox.com>
 ENV CGO_ENABLED=0
 
 RUN apk update \
-    && apk add --no-cache --purge git dep
+    && apk add --no-cache --purge git
 
 # Use go modules to download application code and dependencies
 WORKDIR ${GOPATH}/src/github.com/infobloxopen/atlas-gentool
@@ -27,7 +27,7 @@ RUN go install github.com/envoyproxy/protoc-gen-validate@v0.9.0
 RUN go install github.com/mwitkow/go-proto-validators/protoc-gen-govalidators@v0.3.2
 RUN go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@v1.5.0
 RUN go install github.com/infobloxopen/protoc-gen-preprocess@v1.0.1
-RUN cd ${GOPATH}/src/github.com/infobloxopen/protoc-gen-atlas-query-validate && dep ensure && GO111MODULE=off go install .
+RUN cd ${GOPATH}/src/github.com/infobloxopen/protoc-gen-atlas-query-validate && go mod init && go mod tidy && go install .
 RUN go install github.com/infobloxopen/protoc-gen-atlas-validate@v0.4.2
 RUN go install github.com/infobloxopen/protoc-gen-gorm@v0.21.0
 RUN go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway@v1.15.0

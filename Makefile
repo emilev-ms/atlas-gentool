@@ -5,7 +5,8 @@ IMAGE_NAME := infoblox/atlas-gentool
 GO_PATH                 := /go
 SRCROOT_ON_HOST         := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 SRCROOT_IN_CONTAINER    := $(GO_PATH)/src/github.com/infobloxopen/atlas-gentool
-IMAGE_VERSION           ?= $(shell git describe --tags)
+IMAGE_VERSION := $(shell git describe --tags 2>/dev/null || echo "latest")
+
 
 .PHONY: all
 all: docker-build
